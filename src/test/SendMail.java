@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/SendMail.do")
 public class SendMail extends HttpServlet {
@@ -26,8 +27,10 @@ public class SendMail extends HttpServlet {
 		final String id =  "dlsgur2323@gmail.com"; // 보내는 사람 메일
 		final String password = "vvtvmpilolqbmwtj";	// 메일 비밀번호
 		
+		String email = request.getParameter("email");
+		
 		// 받는 사람 주소
-		String to = "19980622.dday@gmail.com"; // 받는 사람 메일
+		String to = email; // 받는 사람 메일
 		
 		Properties props = new Properties();	// 설정 건드릴 필요 X
 		props.put("mail.smtp.host", host);
@@ -48,15 +51,19 @@ public class SendMail extends HttpServlet {
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
 			// 제목입력
-			message.setSubject("테스트제목123"); // 메일 제목
-			   
+			message.setSubject("너갈너갈 이메일 인증"); // 메일 제목
+			
+			String auth = authnum(); // 인증번호 생성
 			// 내용입력
-			message.setText("테스트 메일입니다. ㅎ2");	// 메일 내용
+			message.setText(auth);	// 메일 내용
 
 			// 메일보내기 성공했으면
 			Transport.send(message);
-			System.out.println("message sent successfully...");
-
+			
+			HttpSession mSession = request.getSession();
+			mSession.setAttribute("authnum", auth);
+			request.getRequestDispatcher("sendMail.jsp").forward(request, response);
+			
 			} catch (MessagingException e) {
 			  e.printStackTrace();
 			}
@@ -67,4 +74,17 @@ public class SendMail extends HttpServlet {
 		doGet(request, response);
 	}
 
+	
+	private String authnum() {
+		String num = "";
+		for(int i = 0; i < 6; i++) {
+			num += (int)(Math.random() * 10);
+		}
+		return num;
+	}
+	
+	
+	
+	
+	
 }

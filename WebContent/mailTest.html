@@ -1,19 +1,58 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>메일 보내기</title>
-
-<script>
-	window.onload = function(){
-		document.getElementById("send_Mail").onclick = function(){
-			location.href = "/test1/SendMail.do"
-		}
-	}	
-</script>
-
-</head>
-<body>
-	<input type="button" id="send_Mail">
-</body>
+	<head>
+		<meta charset="UTF-8">
+		<title>메일 보내기</title>
+		<script src="/test/js/jquery-3.5.1.min.js"></script>		
+		<script>
+			$(function(){
+				$("#send_Mail").on("click", function(){
+					email = $("#email").val();
+					$.ajax({
+						url : "/test/SendMail.do",
+						type : "get",
+						data : { "email" : email },
+						dataType : "json",
+						success : function(res){
+							alert(res.sw)
+						},
+						error : function(req){
+							alert("인증번호를 보낼 수 없습니다." + req.status)
+							
+						}
+					})
+					
+				})
+				$("#check").on("click", function(){
+					check = $("#check_num").val();
+					$.ajax({
+						url : "/test/CheckMail.do",
+						type : "get",
+						data : { "check" : check },
+						dataType : "json",
+						success : function(res){
+							if(res.sw=="실패"){
+								alert("인증 번호가 틀렸습니다.")
+							} else if(res.sw=="성공"){
+								alert("인증 완료")
+							} else if(res.sw=="없음"){
+								alert("인증 번호를 먼저 받으세요.")
+							}
+						},
+						error : function(req){
+							alert(req.status);
+						}
+					})
+				})
+				
+			})
+		</script>
+	
+	</head>
+	<body>
+		<input type="email" id="email" name="email">
+		<input type="button" id="send_Mail" value="인증번호 요청"><br>
+		<input tpye="text" id="check_num" name="check_num">
+		<input type="button" id="check" value="인증">
+	</body>
 </html>
