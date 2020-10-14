@@ -6,14 +6,13 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>Insert title here</title>
-		<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=87c1587ac88e1ca49f898a1b8be46a5c&libraries=services"></script>
 		<style>
-		    .wrap {position: absolute;left: 0;bottom: 40px;width: 260px;height: 300px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 16px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
+		    .wrap {position: absolute;left: 0;bottom: 40px;width: 260px;height: 280px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 16px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
 		    .wrap * {padding: 0;margin: 0;}
 /* 		    .wrap img {width : 260px;height: 180px;} */
 		    .wrap .title {position : relative;}
 		    .wrap .wish {position : absolute; right : 10px; top : 10px;}
-		    .wrap .info {width: 260px;height: 300px;border-radius: 10px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
+		    .wrap .info {width: 260px;height: 280px;border-radius: 10px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
 		    .info .body {position: relative;overflow: hidden;}
 		    .info .desc {position: relative;margin: 13px 0 0 13px;height: 100px;}
 		    .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
@@ -21,22 +20,15 @@
 /* 		    .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')} */
 /* 		    .info .link {color: #5085BB;} */
 		</style>
+		<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=87c1587ac88e1ca49f898a1b8be46a5c&libraries=services"></script>
+		<script type="text/javascript" src="/test/js/jquery-3.5.1.min.js"></script>
 		<script>
-// 			positions = [
-<%-- 			<% --%>
-// 				List<String> list = (List<String>)request.getAttribute("list"); // 일단 스트링이라고 함 
-// 				for(int i = 0; i < list.size(); i++){
-// 					String vo = list.get(i);
-// 					if(i > 0 ) out.print(",");
-<%-- 				%> --%>
-// 					{
-<%-- 						content : "<%= vo.getDwda%>", --%>
-// 						latlng : 
-// 					}
-<%-- 				<%	 --%>
-// 				}
-<%-- 			%> --%>
-// 			]
+			$(function(){
+				$(document).on("click", ".wish" , function(e){
+					e.preventDefault();
+					
+				})
+			})
 		</script>
 	</head>
 	<body>
@@ -82,21 +74,22 @@
 // 				markers[i] = marker;
 				markers[i].setMap(map);
 				overlays[i] = new kakao.maps.CustomOverlay({
-    			    content: '<div class="wrap">' + 
+					clickable : true,
+    			    content: '<a href="" target="_blank"><div class="wrap">' + 
     	            '    <div class="info">' + 
     	            '        <div class="title">' + 
-    	            '            <a href="" target="_blank"><img src="/test/images/가구1.jpg" width="260px" height="180px"></a>' + 
-	    	        '			 <a href="" onclick=alert("관심추가 버튼")><img src="/test/images/check.png" class="wish"></a>' +
+    	            '            <img src="/test/images/가구1.jpg" width="260px" height="170px">' + 
+	    	        '			 <img src="/test/images/check.png" class="wish">' +
     	            '        </div>' + 
-    	            '        <a href=""><div class="body">' + 
+    	            '        <div class="body">' + 
     	            '            <div class="desc">' + 
     	            '                <div class="ellipsis">'+ positions[i].content +'</div>' + 
     	            '                <div class="jibun ellipsis">호텔/객실</div>' + 
     	            '                <div>₩55,600/1박</div>' + 
     	            '            </div>' + 
-    	            '        </div></a>' + 
+    	            '        </div>' +
     	            '    </div>' +    
-    	            '</div>',
+    	            '</div></a>',
     			    map: map,
     			    position: positions[i].latlng
     			});
@@ -116,11 +109,11 @@
 			function closeOverlay(i) {
 				overlays[i].setMap(null);
 			}
-// 			kakao.maps.event.addListener(map, 'click', function() {        
-// 				for(var i = 0; i < positions.length; i++){
-// 					overlays[i].setMap(null);
-// 				}
-// 			})
+			kakao.maps.event.addListener(map, 'click', function(e) {        
+				for(var i = 0; i < positions.length; i++){
+					overlays[i].setMap(null);
+				}
+			})
 		</script>
 		<%
 			for(int i = 0; i < 4; i++){
